@@ -1,0 +1,6 @@
+calender_animated.gif : https://cdn.dribbble.com/users/4874/screenshots/1792443/timely_dribbble.gif
+Kdam_Thmor_Pro : https://fonts.google.com/
+calender.png : https://uxwing.com/google-calendar-icon/
+facebook_icon : https://www.flaticon.com/free-icons/facebook
+google_icon : https://www.flaticon.com/free-icons/google
+Login UI : https://twitter.com/sobuj21145770/status/1124944365309218816
