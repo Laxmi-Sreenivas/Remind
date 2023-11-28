@@ -6,6 +6,7 @@ import 'package:remind/login/options.dart';
 import 'package:remind/login/submit.dart';
 import 'package:remind/login/swappage.dart';
 import 'package:remind/login/toplogo.dart';
+import 'package:remind/template/templatepage.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -17,19 +18,19 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController email = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
-    void signup(){
+    void signup() {
       print(username.text);
       print(password.text);
+      print(email.text);
 
-
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Placeholder()),
-      // );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => TemplatePage()),
+      );
     }
 
     return Scaffold(
@@ -42,8 +43,8 @@ class _SignUpPageState extends State<SignUpPage> {
             smallText: 'Please fill the details & create account',
           ),
           InputField(
-              controllers: [username, password],
-              hintTexts: const ['Username', 'Password']),
+              controllers: [email, username, password],
+              hintTexts: const ['E-mail','Username', 'Password']),
           Submit(
             submitText: 'Sign Up',
             submitAction: signup,
