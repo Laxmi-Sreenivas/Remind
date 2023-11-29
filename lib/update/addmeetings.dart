@@ -15,6 +15,7 @@ class AddMeetingPage extends StatelessWidget {
 
   onSubmit() async {
     print(subject.text);
+    print(selectedDate);
     print(startTime);
     print(endTime);
 

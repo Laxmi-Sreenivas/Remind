@@ -54,7 +54,7 @@ class _TimePickerState extends State<TimePicker> {
         // Handle tap if needed for the entire widget
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        margin: EdgeInsets.only(left: 10, right: 10, top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

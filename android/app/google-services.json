@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100779898069",
+    "project_id": "remind-ae3df",
+    "storage_bucket": "remind-ae3df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100779898069:android:9212efc1d18e9a2fccde5c",
+        "android_client_info": {
+          "package_name": "com.example.remind"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmPObIk2IgKAoGLiRh7MpmzOfl03RCECI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
