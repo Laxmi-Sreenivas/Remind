@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class Options extends StatelessWidget {
   const Options({super.key});
 
-  void handleFacebookLogin(){
+  void handleFacebookLogin() {
     print('Facebook Login');
   }
 
-  void handleGoogleLogin(){
+  void handleGoogleLogin() {
     print('Google Login');
   }
 
@@ -44,7 +44,7 @@ class Options extends StatelessWidget {
                     backgroundColor: Colors.white,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ],

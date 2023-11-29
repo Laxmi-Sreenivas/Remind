@@ -10,7 +10,7 @@ class LandingPage extends StatelessWidget {
     //Navigate To New Page After 3s
     Future.delayed(const Duration(milliseconds: 7000), () {
       Navigator.of(context)
-          .push(NewFadeRoute(builder: (context) => LoginPage()));
+          .pushReplacement(NewFadeRoute(builder: (context) => LoginPage()));
     });
 
     return Scaffold(

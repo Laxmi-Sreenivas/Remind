@@ -22,7 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    void signup() {
+    Future<void> signup() async{
       print(username.text);
       print(password.text);
       print(email.text);

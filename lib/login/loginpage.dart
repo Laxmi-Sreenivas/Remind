@@ -6,6 +6,7 @@ import 'package:remind/login/signuppage.dart';
 import 'package:remind/login/submit.dart';
 import 'package:remind/login/swappage.dart';
 import 'package:remind/login/toplogo.dart';
+import 'package:remind/template/templatepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,19 +16,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    void login() {
-      print(username.text);
+    Future<void> login() async{
+      print(email.text);
       print(password.text);
 
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Placeholder()),
-      // );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => TemplatePage()),
+      );
     }
 
     return Scaffold(
@@ -40,8 +41,8 @@ class _LoginPageState extends State<LoginPage> {
             smallText: 'Please login to continue using our app',
           ),
           InputField(
-              controllers: [username, password],
-              hintTexts: const ['Username', 'Password']),
+              controllers: [email, password],
+              hintTexts: const ['E-mail', 'Password']),
           Submit(
             submitText: 'Login',
             submitAction: login,
