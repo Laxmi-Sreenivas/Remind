@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:remind/services/services.dart';
 import 'package:remind/update/datepicker.dart';
 import 'package:remind/update/subject.dart';
 import 'package:remind/update/submit.dart';
@@ -6,21 +7,18 @@ import 'package:remind/update/timepicker.dart';
 
 class AddMeetingPage extends StatelessWidget {
   final Function onUpdate;
-  AddMeetingPage({super.key, required this.onUpdate});
+  final Service auth;
+  AddMeetingPage({super.key, required this.onUpdate,required this.auth});
 
   final TextEditingController subject = TextEditingController();
   TimeOfDay startTime = TimeOfDay(hour: 1, minute: 0);
-  TimeOfDay endTime = TimeOfDay(hour: 1, minute: 0);
+  TimeOfDay endTime = TimeOfDay(hour: 1, minute: 1);
   DateTime selectedDate = DateTime.now();
 
   onSubmit() async {
-    print(subject.text);
-    print(selectedDate);
-    print(startTime);
-    print(endTime);
-
-    //Send The Event Data to Backend
-
+    //Adding Event Data
+    await auth.addEvent(selectedDate,startTime,endTime,subject.text);
+    //Updating UI
     onUpdate();
   }
 

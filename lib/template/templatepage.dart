@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:remind/events/eventpage.dart';
 import 'package:remind/home/homepage.dart';
 import 'package:remind/profile/profilepage.dart';
+import 'package:remind/services/services.dart';
 import 'package:remind/template/loadingpage.dart';
 import 'package:remind/template/meetings.dart';
 import 'package:remind/template/navbar.dart';
@@ -9,7 +10,8 @@ import 'package:remind/template/topbar.dart';
 import 'package:remind/update/addmeetings.dart';
 
 class TemplatePage extends StatefulWidget {
-  const TemplatePage({super.key});
+  final Service auth;
+  const TemplatePage({super.key,required this.auth});
 
   @override
   State<TemplatePage> createState() => _TemplatePageState();
@@ -34,7 +36,7 @@ class _TemplatePageState extends State<TemplatePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<MeetingData>(
-        future: fetchAppointments(),
+        future: fetchAppointments(widget.auth),
         builder: (context, AsyncSnapshot<MeetingData> snapshot) {
           if (snapshot.connectionState != ConnectionState.done && needForRefresh) {
             return Scaffold(
@@ -52,8 +54,8 @@ class _TemplatePageState extends State<TemplatePage> {
             List<Widget> pages = [
               HomePage(meetingInfo: snapshot.data!),
               EventPage(meetingInfo: snapshot.data!),
-              AddMeetingPage(onUpdate: dbUpate),
-              Profilepage()
+              AddMeetingPage(auth : widget.auth,onUpdate: dbUpate),
+              Profilepage(auth: widget.auth)
             ];
 
             return Scaffold(

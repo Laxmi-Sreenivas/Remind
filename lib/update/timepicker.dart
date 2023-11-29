@@ -17,7 +17,7 @@ class TimePicker extends StatefulWidget {
 
 class _TimePickerState extends State<TimePicker> {
   TimeOfDay startTime = TimeOfDay(hour: 1, minute: 0);
-  TimeOfDay endTime = TimeOfDay(hour: 1, minute: 0);
+  TimeOfDay endTime = TimeOfDay(hour: 1, minute: 1);
 
   Future<void> updateStartTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -40,95 +40,110 @@ class _TimePickerState extends State<TimePicker> {
     );
 
     if (picked != null && picked != endTime) {
-      widget.onEndTimePicked(picked);
-      setState(() {
-        endTime = picked;
-      });
+      endTime = picked;
+      if (validEndTime()) {
+        widget.onEndTimePicked(picked);
+        setState(() {
+          endTime = picked;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Enter Valid end time'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        setState(() {
+          endTime = startTime;
+        });
+      }
     }
+  }
+
+  bool validEndTime() {
+    // Check if start time is less than end time
+    return startTime.hour < endTime.hour ||
+        (startTime.hour == endTime.hour && startTime.minute < endTime.minute);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Handle tap if needed for the entire widget
-      },
-      child: Container(
-        margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: const [
-                Icon(
-                  Icons.access_time,
-                  size: 30,
+    return Container(
+      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Icon(
+                Icons.access_time,
+                size: 30,
+              ),
+              SizedBox(width: 10),
+              Text(
+                "Edit Time",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          GestureDetector(
+            onTap: () => updateStartTime(context),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                TimeBox(
+                  time: startTime.hour.toString().padLeft(2, '0'),
+                  size: 40,
                 ),
-                SizedBox(width: 10),
                 Text(
-                  "Edit Time",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ":",
+                  style: TextStyle(fontSize: 30),
                 ),
+                TimeBox(
+                  time: startTime.minute.toString().padLeft(2, '0'),
+                  size: 40,
+                ),
+                Spacer(),
+                Text(
+                  "(Start Time)",
+                  style: TextStyle(fontSize: 20),
+                ),
+                Spacer(
+                  flex: 2,
+                )
               ],
             ),
-            GestureDetector(
-              onTap: () => updateStartTime(context),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  TimeBox(
-                    time: startTime.hour.toString().padLeft(2, '0'),
-                    size: 40,
-                  ),
-                  Text(
-                    ":",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  TimeBox(
-                    time: startTime.minute.toString().padLeft(2, '0'),
-                    size: 40,
-                  ),
-                  Spacer(),
-                  Text(
-                    "(Start Time)",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  )
-                ],
-              ),
+          ),
+          GestureDetector(
+            onTap: () => updateEndTime(context),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                TimeBox(
+                  time: endTime.hour.toString().padLeft(2, '0'),
+                  size: 40,
+                ),
+                Text(
+                  ":",
+                  style: TextStyle(fontSize: 30),
+                ),
+                TimeBox(
+                  time: endTime.minute.toString().padLeft(2, '0'),
+                  size: 40,
+                ),
+                Spacer(),
+                Text(
+                  "(End Time)",
+                  style: TextStyle(fontSize: 20),
+                ),
+                Spacer(
+                  flex: 2,
+                )
+              ],
             ),
-            GestureDetector(
-              onTap: () => updateEndTime(context),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  TimeBox(
-                    time: endTime.hour.toString().padLeft(2, '0'),
-                    size: 40,
-                  ),
-                  Text(
-                    ":",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  TimeBox(
-                    time: endTime.minute.toString().padLeft(2, '0'),
-                    size: 40,
-                  ),
-                  Spacer(),
-                  Text(
-                    "(End Time)",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(
-                    flex: 2,
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

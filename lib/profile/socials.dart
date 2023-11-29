@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:remind/profile/socialcard.dart';
+import 'package:remind/services/services.dart';
 
 class Socials extends StatelessWidget {
-  const Socials({super.key});
+  final Service auth;
+  const Socials({super.key,required this.auth});
 
   void handleGoogleAuth() {
     print('Google Auth');
@@ -31,14 +33,17 @@ class Socials extends StatelessWidget {
             ),
           ),
           SocialCard(
+            auth: auth,
             account: "email",
             authHandler: handleEmailAuth,
           ),
           SocialCard(
+            auth: auth,
             account: "facebook",
             authHandler: handleFacebookAuth,
           ),
           SocialCard(
+            auth: auth,
             account: "google",
             authHandler: handleGoogleAuth,
           )

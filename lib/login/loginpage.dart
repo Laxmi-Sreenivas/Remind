@@ -7,6 +7,7 @@ import 'package:remind/login/submit.dart';
 import 'package:remind/login/swappage.dart';
 import 'package:remind/login/toplogo.dart';
 import 'package:remind/template/templatepage.dart';
+import 'package:remind/services/services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,16 +20,34 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
+  final Service _auth = Service();
+
+  @override
+  void dispose() {
+    password.dispose();
+    email.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future<void> login() async{
+    login() async {
       print(email.text);
       print(password.text);
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => TemplatePage()),
-      );
+      bool userExits = await _auth.logInWithEmailandPassword(email.text, password.text);
+
+      if (userExits) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => TemplatePage(auth: _auth)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Login Error'),
+          duration: Duration(seconds: 2),
+        ));
+      }
     }
 
     return Scaffold(

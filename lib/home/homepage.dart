@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
       dataSource: meetingInfo,
       view: CalendarView.day,
       minDate: DateTime.now(),
-      maxDate: DateTime.now(),
+      maxDate: DateTime.now().add(Duration(seconds: 1)),
     );
   }
 }

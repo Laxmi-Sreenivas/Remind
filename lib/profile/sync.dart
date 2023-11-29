@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class Logout extends StatelessWidget {
+class Sync extends StatelessWidget {
   final VoidCallback submitAction;
-  const Logout({super.key, required this.submitAction});
+  const Sync({super.key, required this.submitAction});
 
   @override
   Widget build(BuildContext context) {
@@ -11,12 +11,12 @@ class Logout extends StatelessWidget {
       child: ElevatedButton(
         onPressed: submitAction,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.green,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             )),
         child: Text(
-          'Log Out',
+          'Sync Data Across Devices',
           style: TextStyle(fontSize: 20),
         ),
       ),

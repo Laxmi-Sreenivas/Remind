@@ -32,7 +32,7 @@ class Connected extends StatelessWidget {
                 Text(
                   accountId,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
