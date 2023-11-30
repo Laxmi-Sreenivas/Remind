@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Service {
   //Class Specific
@@ -28,7 +29,7 @@ class Service {
         'username': username,
         'email': email,
         'event': [],
-        'gmail': '',
+        'google': '',
         'facebook': '',
         'date': convertDate(DateTime.now())
       });
@@ -143,16 +144,15 @@ class Service {
   }
 
   //Sync Data Across Devices
-  Future<void> syncData() async{
-      User? user = _auth.currentUser;
-      DocumentSnapshot userDoc = await _users.doc(user?.uid).get();
-      print("New user Doc Fetched");
+  Future<void> syncData() async {
+    User? user = _auth.currentUser;
+    DocumentSnapshot userDoc = await _users.doc(user?.uid).get();
+    print("New user Doc Fetched");
 
-      if (userDoc.exists) {
-        userData = userDoc.data() as Map<String, dynamic>;
-        print("User Data Updated");
-      }
-
+    if (userDoc.exists) {
+      userData = userDoc.data() as Map<String, dynamic>;
+      print("User Data Updated");
+    }
   }
 
   //Utility Function : Simple Getter
@@ -196,5 +196,97 @@ class Service {
 
     // Create and return DateTime object
     return DateTime(year, month, day, hour, minute);
+  }
+
+  //Google Auth Login Implementation : If email = gmail -> automatically linked
+  Future<bool> googleAuth() async {
+    try {
+      await GoogleSignIn().signOut();
+      final GoogleSignInAccount? googleUser =
+          await GoogleSignIn(forceCodeForRefreshToken: true).signIn();
+
+      // User canceled the sign-in process
+      if (googleUser == null) {
+        return false;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential authResult = await _auth.signInWithCredential(credential);
+      User? user = authResult.user;
+
+      DocumentSnapshot userDoc = await _users.doc(user?.uid).get();
+
+      String gmail = user!.email ?? "";
+      String username = user.displayName ?? "";
+
+      if (userDoc.exists) {
+        print('User Already Exist : Updating Only Gmail');
+        await _users.doc(user.uid).update({
+          'google': gmail,
+        });
+      } else {
+        await _users.doc(user.uid).set({
+          'username': username,
+          'email': gmail,
+          'event': [],
+          'google': gmail,
+          'facebook': '',
+          'date': convertDate(DateTime.now()),
+        });
+        print('User Added to Db');
+      }
+
+      DocumentSnapshot newUserDoc = await _users.doc(user.uid).get();
+      print("User Doc Fetched");
+
+      if (newUserDoc.exists) {
+        userData = newUserDoc.data() as Map<String, dynamic>;
+        print("User Data Stored");
+      }
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  //Linking Google Account to Already Existing Account
+  Future<void> linkAccountWithGoogle() async {
+    try {
+      await GoogleSignIn().signOut();
+      // Sign in with Google
+      GoogleSignInAccount? googleSignInAccount =
+          await GoogleSignIn(forceCodeForRefreshToken: true).signIn();
+      GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      AuthCredential googleCredential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      print("Fetched Credentiatls");
+
+      // Get the current user
+      User? user = _auth.currentUser;
+      await user?.linkWithCredential(googleCredential);
+
+      //Modyfing fields
+      await _users.doc(user?.uid).update({
+        'google': googleSignInAccount.email,
+      });
+
+      userData!["google"] = googleSignInAccount.email;
+
+      print('Account linked with Google successfully!');
+    } catch (e) {
+      print('Error linking account with Google: $e');
+    }
   }
 }

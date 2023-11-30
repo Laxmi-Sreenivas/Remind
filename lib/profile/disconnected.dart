@@ -8,7 +8,7 @@ class DisConnected extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => {authHandler()},
+      onTap: () async => {await authHandler()},
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(top: 15, bottom: 5),

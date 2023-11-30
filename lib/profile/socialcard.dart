@@ -19,8 +19,8 @@ class _SocialCardState extends State<SocialCard> {
     return widget.auth.fetchField(widget.account) ?? "";
   }
 
-  void updateAuthState() async {
-    widget.authHandler();
+  Future<void> updateAuthState() async {
+    await widget.authHandler();
     setState(() {});
   }
 

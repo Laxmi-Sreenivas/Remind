@@ -6,8 +6,9 @@ class Socials extends StatelessWidget {
   final Service auth;
   const Socials({super.key,required this.auth});
 
-  void handleGoogleAuth() {
+  Future<void> handleGoogleAuth() async{
     print('Google Auth');
+    await auth.linkAccountWithGoogle();
   }
 
   void handleFacebookAuth() {

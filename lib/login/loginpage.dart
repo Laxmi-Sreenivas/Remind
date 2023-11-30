@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
             tapText: 'Sign Up',
             page: SignUpPage(),
           ),
-          Options(),
+          Options(auth: _auth),
         ],
       ),
     );

@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:remind/services/services.dart';
+import 'package:remind/template/templatepage.dart';
 
 class Options extends StatelessWidget {
-  const Options({super.key});
+  final Service auth;
+  const Options({super.key,required this.auth});
 
   void handleFacebookLogin() {
     print('Facebook Login');
   }
 
-  void handleGoogleLogin() {
+  handleGoogleLogin(BuildContext context) async{
     print('Google Login');
+    try{
+      bool authWorked = await auth.googleAuth();
+      
+      if(authWorked){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => TemplatePage(auth: auth)),
+        );
+      }
+      else{
+        print("Google Auth Failed");
+      }
+
+    }
+    catch (e){
+      print("Google Oauth Error : ");
+      print(e);
+    }
   }
 
   @override
@@ -35,7 +56,7 @@ class Options extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: handleGoogleLogin,
+                onTap: () async => {await handleGoogleLogin(context)},
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: CircleAvatar(
