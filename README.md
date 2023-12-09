@@ -1,5 +1,5 @@
 # Remind - Reminder Application
-[Facebook Test Users] (It's Inside The Report)
+[Facebook Test Users] (Inside The Report)
 
 ## Table of Contents
 - [Project Overview](#project-overview)
