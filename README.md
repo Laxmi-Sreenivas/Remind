@@ -1,7 +1,5 @@
 # Remind - Reminder Application
 
-![Remind Logo](link_to_your_logo)
-
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Problem Definition](#problem-definition)
