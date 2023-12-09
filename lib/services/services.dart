@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Service {
   //Class Specific
@@ -222,8 +225,8 @@ class Service {
 
       DocumentSnapshot userDoc = await _users.doc(user?.uid).get();
 
-      String gmail = user!.email ?? "";
-      String username = user.displayName ?? "";
+      String gmail = googleUser.email;
+      String username = user!.displayName ?? "";
 
       if (userDoc.exists) {
         print('User Already Exist : Updating Only Gmail');
@@ -287,6 +290,103 @@ class Service {
       print('Account linked with Google successfully!');
     } catch (e) {
       print('Error linking account with Google: $e');
+    }
+  }
+
+  //Facebook Auth Login Implementation
+  Future<bool> facebookAuth() async {
+    try {
+      await FacebookAuth.instance.logOut();
+      final LoginResult result = await FacebookAuth.instance.login();
+
+      // User canceled the sign-in process
+      if (result.status == LoginStatus.cancelled) {
+        return false;
+      }
+
+      final AccessToken accessToken = result.accessToken!;
+      final AuthCredential credential =
+          FacebookAuthProvider.credential(accessToken.token);
+
+      UserCredential authResult = await _auth.signInWithCredential(credential);
+      User? user = authResult.user;
+
+      DocumentSnapshot userDoc = await _users.doc(user?.uid).get();
+
+      String facebookEmail = user!.email ?? "";
+      String username = user.displayName ?? "";
+
+      if (userDoc.exists) {
+        print('User Already Exists: Updating Only Facebook Email');
+        await _users.doc(user.uid).update({
+          'facebook': facebookEmail,
+        });
+      } else {
+        await _users.doc(user.uid).set({
+          'username': username,
+          'email': facebookEmail,
+          'event': [],
+          'google': '',
+          'facebook': facebookEmail,
+          'date': convertDate(DateTime.now()),
+        });
+        print('User Added to Db');
+      }
+
+      DocumentSnapshot newUserDoc = await _users.doc(user.uid).get();
+      print("User Doc Fetched");
+
+      if (newUserDoc.exists) {
+        userData = newUserDoc.data() as Map<String, dynamic>;
+        print("User Data Stored");
+      }
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  //Linking Facebook Account to Already Existing Account
+  Future<void> linkAccountWithFacebook() async {
+    try {
+      await FacebookAuth.instance.logOut();
+      final LoginResult result = await FacebookAuth.instance.login();
+      if (result.status == LoginStatus.cancelled) {
+        print('Facebook sign-in canceled.');
+        return;
+      }
+
+      final AccessToken accessToken = result.accessToken!;
+      final AuthCredential facebookCredential =
+          FacebookAuthProvider.credential(accessToken.token);
+
+      print("Fetched Credentials");
+
+      // Get the current user
+      User? user = _auth.currentUser;
+      await user?.linkWithCredential(facebookCredential);
+
+      //Get The Gmail
+       final graphResponse = await http.get(
+          Uri.parse('https://graph.facebook.com/v14.0/me?fields=id,name,email'),
+          headers: {'Authorization': 'Bearer ${accessToken.token}'},
+        );
+        final Map<String, dynamic> facebookUserData = json.decode(graphResponse.body);
+        String facebookEmail = facebookUserData['email'] ?? '';
+
+
+      // Modify fields
+      await _users.doc(user?.uid).update({
+        'facebook': facebookEmail,
+      });
+
+      userData!["facebook"] = facebookEmail;
+
+      print('Account linked with Facebook successfully!');
+    } catch (e) {
+      print('Error linking account with Facebook: $e');
     }
   }
 }

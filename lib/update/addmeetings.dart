@@ -12,7 +12,7 @@ class AddMeetingPage extends StatelessWidget {
 
   final TextEditingController subject = TextEditingController();
   TimeOfDay startTime = TimeOfDay(hour: 1, minute: 0);
-  TimeOfDay endTime = TimeOfDay(hour: 1, minute: 1);
+  TimeOfDay endTime = TimeOfDay(hour: 2, minute: 30);
   DateTime selectedDate = DateTime.now();
 
   onSubmit() async {

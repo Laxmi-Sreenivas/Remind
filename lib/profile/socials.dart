@@ -11,8 +11,9 @@ class Socials extends StatelessWidget {
     await auth.linkAccountWithGoogle();
   }
 
-  void handleFacebookAuth() {
+  Future<void> handleFacebookAuth() async{
     print('Facebook Auth');
+    await auth.linkAccountWithFacebook();
   }
 
   void handleEmailAuth() {
