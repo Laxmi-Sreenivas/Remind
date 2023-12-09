@@ -8,7 +8,7 @@ class SocialCard extends StatefulWidget {
   final Function authHandler;
   final Service auth;
   const SocialCard(
-      {super.key, required this.account, required this.authHandler,required this.auth});
+      {super.key,required this.account,required this.authHandler,required this.auth});
 
   @override
   State<SocialCard> createState() => _SocialCardState();
@@ -19,13 +19,13 @@ class _SocialCardState extends State<SocialCard> {
     return widget.auth.fetchField(widget.account) ?? "";
   }
 
-  Future<void> updateAuthState() async {
-    await widget.authHandler();
-    setState(() {});
-  }
-
   @override
   Widget build(context) {
+    Future<void> updateAuthState() async {
+      await widget.authHandler(context);
+      setState(() {});
+    }
+
     String accountName = checkDbForAccount();
     return accountName != ""
         ? Connected(

@@ -11,7 +11,9 @@ import 'package:remind/update/addmeetings.dart';
 
 class TemplatePage extends StatefulWidget {
   final Service auth;
-  const TemplatePage({super.key,required this.auth});
+  final String loginMethod;
+  const TemplatePage(
+      {super.key, required this.auth, required this.loginMethod});
 
   @override
   State<TemplatePage> createState() => _TemplatePageState();
@@ -20,6 +22,7 @@ class TemplatePage extends StatefulWidget {
 class _TemplatePageState extends State<TemplatePage> {
   int pageIndex = 0;
   bool needForRefresh = true;
+  bool snackbarShown = false;
 
   void dbUpate() {
     setState(() {
@@ -33,12 +36,31 @@ class _TemplatePageState extends State<TemplatePage> {
     });
   }
 
+  displaySnackBar() {
+  //Snack Bar For Login Method
+    if (!snackbarShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Logged in Via ${widget.loginMethod}"),
+            duration: Duration(seconds: 5),
+          ),
+        );
+        snackbarShown = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<MeetingData>(
         future: fetchAppointments(widget.auth),
         builder: (context, AsyncSnapshot<MeetingData> snapshot) {
-          if (snapshot.connectionState != ConnectionState.done && needForRefresh) {
+          displaySnackBar();
+
+          //Future Builder Logic
+          if (snapshot.connectionState != ConnectionState.done &&
+              needForRefresh) {
             return Scaffold(
               appBar: TopBar(),
               body: LoadingPage(),
@@ -47,14 +69,13 @@ class _TemplatePageState extends State<TemplatePage> {
                 update: moveToIndex,
               ),
             );
-          } 
-          else {
+          } else {
             needForRefresh = false;
 
             List<Widget> pages = [
               HomePage(meetingInfo: snapshot.data!),
               EventPage(meetingInfo: snapshot.data!),
-              AddMeetingPage(auth : widget.auth,onUpdate: dbUpate),
+              AddMeetingPage(auth: widget.auth, onUpdate: dbUpate),
               Profilepage(auth: widget.auth)
             ];
 

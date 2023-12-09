@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:remind/profile/emailquerybox.dart';
 import 'package:remind/profile/socialcard.dart';
 import 'package:remind/services/services.dart';
 
 class Socials extends StatelessWidget {
   final Service auth;
-  const Socials({super.key,required this.auth});
+  const Socials({super.key, required this.auth});
 
-  Future<void> handleGoogleAuth() async{
+  Future<void> handleGoogleAuth() async {
     print('Google Auth');
     await auth.linkAccountWithGoogle();
   }
 
-  Future<void> handleFacebookAuth() async{
+  Future<void> handleFacebookAuth() async {
     print('Facebook Auth');
     await auth.linkAccountWithFacebook();
   }
 
-  void handleEmailAuth() {
-    print('Outlook Auth');
+  Future<void> handleEmailAuth(BuildContext context) async {
+    print('Email Auth');
+    Map<String, String>? result = await context.showEmailPopup(auth);
+    String email = result!['email'] ?? "";
+    String password = result['password'] ?? "";
+
+
+    if(email != "" && password != ""){
+      await auth.linkAccountWithEmailPassword(email, password);
+    }
   }
 
   @override
@@ -37,17 +46,17 @@ class Socials extends StatelessWidget {
           SocialCard(
             auth: auth,
             account: "email",
-            authHandler: handleEmailAuth,
+            authHandler: (context) async => {await handleEmailAuth(context)},
           ),
           SocialCard(
             auth: auth,
             account: "facebook",
-            authHandler: handleFacebookAuth,
+            authHandler: (context) async => {await handleFacebookAuth()},
           ),
           SocialCard(
             auth: auth,
             account: "google",
-            authHandler: handleGoogleAuth,
+            authHandler: (context) async => {await handleGoogleAuth()},
           )
         ],
       ),

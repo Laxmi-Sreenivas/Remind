@@ -38,12 +38,17 @@ class _SignUpPageState extends State<SignUpPage> {
       print(password.text);
       print(email.text);
 
-      bool userCreated = await _auth.signUpWithEmailandPassword(email.text, password.text, username.text);
+      bool userCreated = await _auth.signUpWithEmailandPassword(
+          email.text, password.text, username.text);
 
       if (userCreated) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => TemplatePage(auth: _auth)),
+          MaterialPageRoute(
+              builder: (context) => TemplatePage(
+                    auth: _auth,
+                    loginMethod: "Email & Password",
+                  )),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

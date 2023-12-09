@@ -35,12 +35,17 @@ class _LoginPageState extends State<LoginPage> {
       print(email.text);
       print(password.text);
 
-      bool userExits = await _auth.logInWithEmailandPassword(email.text, password.text);
+      bool userExits =
+          await _auth.logInWithEmailandPassword(email.text, password.text);
 
       if (userExits) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => TemplatePage(auth: _auth)),
+          MaterialPageRoute(
+              builder: (context) => TemplatePage(
+                    auth: _auth,
+                    loginMethod: "Email & Password",
+                  )),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

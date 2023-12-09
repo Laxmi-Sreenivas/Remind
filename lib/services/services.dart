@@ -236,7 +236,7 @@ class Service {
       } else {
         await _users.doc(user.uid).set({
           'username': username,
-          'email': gmail,
+          'email': "",
           'event': [],
           'google': gmail,
           'facebook': '',
@@ -313,18 +313,25 @@ class Service {
 
       DocumentSnapshot userDoc = await _users.doc(user?.uid).get();
 
-      String facebookEmail = user!.email ?? "";
-      String username = user.displayName ?? "";
+      //Get The Email & Name
+      final graphResponse = await http.get(
+        Uri.parse('https://graph.facebook.com/v14.0/me?fields=id,name,email'),
+        headers: {'Authorization': 'Bearer ${accessToken.token}'},
+      );
+      final Map<String, dynamic> facebookUserData =
+          json.decode(graphResponse.body);
+      String facebookEmail = facebookUserData['email'];
+      String facebookUsername = facebookUserData["name"];
 
       if (userDoc.exists) {
         print('User Already Exists: Updating Only Facebook Email');
-        await _users.doc(user.uid).update({
+        await _users.doc(user!.uid).update({
           'facebook': facebookEmail,
         });
       } else {
-        await _users.doc(user.uid).set({
-          'username': username,
-          'email': facebookEmail,
+        await _users.doc(user!.uid).set({
+          'username': facebookUsername,
+          'email': "",
           'event': [],
           'google': '',
           'facebook': facebookEmail,
@@ -369,13 +376,13 @@ class Service {
       await user?.linkWithCredential(facebookCredential);
 
       //Get The Gmail
-       final graphResponse = await http.get(
-          Uri.parse('https://graph.facebook.com/v14.0/me?fields=id,name,email'),
-          headers: {'Authorization': 'Bearer ${accessToken.token}'},
-        );
-        final Map<String, dynamic> facebookUserData = json.decode(graphResponse.body);
-        String facebookEmail = facebookUserData['email'] ?? '';
-
+      final graphResponse = await http.get(
+        Uri.parse('https://graph.facebook.com/v14.0/me?fields=id,name,email'),
+        headers: {'Authorization': 'Bearer ${accessToken.token}'},
+      );
+      final Map<String, dynamic> facebookUserData =
+          json.decode(graphResponse.body);
+      String facebookEmail = facebookUserData['email'] ?? '';
 
       // Modify fields
       await _users.doc(user?.uid).update({
@@ -387,6 +394,30 @@ class Service {
       print('Account linked with Facebook successfully!');
     } catch (e) {
       print('Error linking account with Facebook: $e');
+    }
+  }
+
+  //Linking Oauth Accounts with Email & Password
+  Future<void> linkAccountWithEmailPassword(String email, String password) async {
+    try {
+      User? user = _auth.currentUser;
+
+      // Generate credentials with email and password
+      AuthCredential emailCredential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
+
+      await user?.linkWithCredential(emailCredential);
+      await _users.doc(user?.uid).update({
+        'email': email,
+      });
+
+      userData!["email"] = email;
+      
+      print('Account linked with email and password successfully!');
+    } catch (e) {
+      print('Error linking account with email and password: $e');
     }
   }
 }

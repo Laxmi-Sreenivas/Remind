@@ -14,7 +14,11 @@ class Options extends StatelessWidget {
       if (authWorked) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => TemplatePage(auth: auth)),
+          MaterialPageRoute(
+              builder: (context) => TemplatePage(
+                    auth: auth,
+                    loginMethod: "Facebook OAuth",
+                  )),
         );
       } else {
         print("Facebook Auth Failed");
@@ -33,7 +37,11 @@ class Options extends StatelessWidget {
       if (authWorked) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => TemplatePage(auth: auth)),
+          MaterialPageRoute(
+              builder: (context) => TemplatePage(
+                    auth: auth,
+                    loginMethod: "Google OAuth",
+                  )),
         );
       } else {
         print("Google Auth Failed");
