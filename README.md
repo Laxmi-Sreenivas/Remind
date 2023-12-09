@@ -1,7 +1,5 @@
 # Remind - Reminder Application
 
-[Watch Demo Video](https://iiitbac-my.sharepoint.com/:v:/g/personal/laxmi_sreenivas_iiitb_ac_in/EQNFL69VSXZDpKwLt82ZiMkBbLlJq5xRXC9OPTgh1FQD5Q?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=fYsPe9)
-
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Problem Definition](#problem-definition)
@@ -19,6 +17,7 @@
   - [Run the App](#run-the-app)
   - [Build the App](#build-the-app)
 - [References](#references)
+-[Watch Demo Video](https://iiitbac-my.sharepoint.com/:v:/g/personal/laxmi_sreenivas_iiitb_ac_in/EQNFL69VSXZDpKwLt82ZiMkBbLlJq5xRXC9OPTgh1FQD5Q?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=fYsPe9)
 
 ## Project Overview
 
