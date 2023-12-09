@@ -17,6 +17,7 @@
   - [Get Dependencies](#get-dependencies)
   - [USB Debugging](#usb-debugging)
   - [Run the App](#run-the-app)
+  - [Build the App](#build-the-app)
 - [References](#references)
 
 ## Project Overview
@@ -92,7 +93,17 @@ flutter run
 
 This will build the app and install it on your connected Android device.
 
-Now you should be able to explore Remind on your device. If you encounter any issues during setup or have suggestions, please open an [issue](https://github.com/Laxmi-Sreenivas/remind/issues) on the GitHub repository. Happy reminding!
+### Build the App
+
+To build the standalone APK of the application, use the following command:
+
+```bash
+flutter build apk
+```
+
+The built APK file will be located in the `build/app/outputs/flutter-apk/` directory. You can install this APK on your Android device by transferring it to the device and opening the file using a file manager.
+
+Now you should be able to explore and use Remind on your device. If you encounter any issues during setup or have suggestions, please open an [issue](https://github.com/Laxmi-Sreenivas/remind/issues) on the GitHub repository. Happy reminding!
 
 ## References
 
